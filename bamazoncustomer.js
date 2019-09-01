@@ -10,16 +10,41 @@ var connection = mysql.createConnection({
 })
 
 connection.connect(function (error) {
-
-})
-
-connection.query("SELECT * FROM Products", function (error, results) {
-    if (error){
-        console.log(error)
+    if (error) {
+        console.log()
     } else {
-        console.log(results)
+        connection.query("SELECT item_ID,product_name,department_name,price FROM Products", function (error, results) {
+            if (error) {
+                console.log(error)
+            } else {
+                for (var i = 0 ; i < results.length ; i++) {
+                    console.log("ID:"+results[i].item_ID+" | Product: "+results[i].product_name+" | Department: "+results[i].department_name+" | Price: "+results[i].price+" | " )
+                }
+                
+            }
+        })
     }
 })
 
 
+
+inquirer.prompt([
+    {
+        type: "list",
+        message: "Select the ID of the item you want to purchase",
+        choices: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        name: "choose",
+    },
+    {
+        type: "text",
+        message: "How many would you like to buy",
+        name: "quantity",
+    }
+]).then(function(response) {
+    if (response) {
+        console.log(response.choose)
+        console.log(response.quantity)
+    }
+
+})
 
