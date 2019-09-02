@@ -17,10 +17,10 @@ connection.connect(function (error) {
             if (error) {
                 console.log(error)
             } else {
-                for (var i = 0 ; i < results.length ; i++) {
-                    console.log("ID:"+results[i].item_ID+" | Product: "+results[i].product_name+" | Department: "+results[i].department_name+" | Price: "+results[i].price+" | " )
+                for (var i = 0; i < results.length; i++) {
+                    console.log("ID:" + results[i].item_ID + " | Product: " + results[i].product_name + " | Department: " + results[i].department_name + " | Price: " + results[i].price + " | ")
                 }
-                
+
             }
         })
     }
@@ -40,11 +40,18 @@ inquirer.prompt([
         message: "How many would you like to buy",
         name: "quantity",
     }
-]).then(function(response) {
-    if (response) {
-        console.log(response.choose)
-        console.log(response.quantity)
-    }
+]).then(function (response) {
+    console.log(response.choose)
+    console.log(response.quantity)
+    var choose = response.choose;
+    var quantity = response.quantity
 
+    connection.query("SELECT price,stock_quantity,department_name FROM Products WHERE item_ID=" + choose, function (error, results) {
+        if (error) {
+            console.log(error)
+        } else {
+            console.log(results)
+        }
+    })
 })
 
