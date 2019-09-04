@@ -41,16 +41,23 @@ inquirer.prompt([
         name: "quantity",
     }
 ]).then(function (response) {
-    console.log(response.choose)
-    console.log(response.quantity)
+
     var choose = response.choose;
     var quantity = response.quantity
-
-    connection.query("SELECT price,stock_quantity,department_name FROM Products WHERE item_ID=" + choose, function (error, results) {
+    console.log(choose)
+    console.log(quantity)
+    connection.query("SELECT price,stock_quantity,product_name,department_name FROM Products WHERE item_ID=" + choose, function (error, results) {
         if (error) {
             console.log(error)
         } else {
             console.log(results)
+            for (var i = 0; i < results.length; i++) {
+                console.log("**********CHECKOUT**********")
+                console.log("Name: " + results[i].product_name+ " | Department: "+results[i].department_name+" | Quantity: "+ quantity+ " | Price: " + results[i].price * quantity+" | ")
+            }
+            connection.query("UPDATE stock_quantity FROM WHERE item_ID ="+ choose+"VALUES(-"+quantity+")",function(error,results){
+                
+
         }
     })
 })
