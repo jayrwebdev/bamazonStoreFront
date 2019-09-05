@@ -11,7 +11,7 @@ var connection = mysql.createConnection({
 
 connection.connect(function (error) {
     if (error) {
-        console.log()
+        console.log(error)
     } else {
         connection.query("SELECT item_ID,product_name,department_name,price FROM Products", function (error, results) {
             if (error) {
@@ -50,14 +50,18 @@ inquirer.prompt([
         if (error) {
             console.log(error)
         } else {
-            console.log(results)
+
             for (var i = 0; i < results.length; i++) {
                 console.log("**********CHECKOUT**********")
-                console.log("Name: " + results[i].product_name+ " | Department: "+results[i].department_name+" | Quantity: "+ quantity+ " | Price: " + results[i].price * quantity+" | ")
+                console.log("Name: " + results[i].product_name + " | Department: " + results[i].department_name + " | Quantity: " + quantity + " | Price: " + results[i].price * quantity + " | ")
             }
-            connection.query("UPDATE stock_quantity FROM WHERE item_ID ="+ choose+"VALUES(-"+quantity+")",function(error,results){
-                
 
+            connection.query("UPDATE Products SET stock_quantity = stock_quantity - " + quantity + " WHERE item_ID =" + choose, function (error, results) {
+                if (error) {
+                    console.log("ther was an error", error)
+                } else {
+                }
+            })
         }
     })
 })
