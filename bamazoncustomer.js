@@ -46,7 +46,7 @@ inquirer.prompt([
     var quantity = response.quantity
     console.log(choose)
     console.log(quantity)
-    connection.query("SELECT price,stock_quantity,product_name,department_name FROM Products WHERE item_ID=" + choose, function (error, results) {
+    connection.query("SELECT price,stock_quantity,product_name,department_name FROM Products WHERE item_ID=?", [choose], function (error, results) {
         if (error) {
             console.log(error)
         } else {
@@ -56,13 +56,22 @@ inquirer.prompt([
                 console.log("Name: " + results[i].product_name + " | Department: " + results[i].department_name + " | Quantity: " + quantity + " | Price: " + results[i].price * quantity + " | ")
             }
 
-            connection.query("UPDATE Products SET stock_quantity = stock_quantity - " + quantity + " WHERE item_ID =" + choose, function (error, results) {
+            connection.query("UPDATE Products SET stock_quantity = stock_quantity - ?   WHERE  item_ID=?", [quantity, choose], function (error, results) {
                 if (error) {
                     console.log("ther was an error", error)
                 } else {
                 }
+
             })
+
+            if (results.stock_quantity === 0) {
+                console.log("This item is out of stock")
+                
+            }
         }
+
     })
+
 })
+
 
