@@ -45,12 +45,28 @@ inquirer.prompt([
     connection.query("Select stock_quantity FROM Products WHERE item_id = ?", [choose], function (err, results) {
         if (err) {
             console.log(err)
-            return
-        } else if (results.stock_quantity <= 0) {
-            console.log("Pick another item, this item is cyrrently out of stock")
-            return
+        } else if (results[0].stock_quantity <= 0) {
+            console.log("Pick another item, this item is currently out of stock")
         } else {
-
+            connection.query("SELECT * FROM Products WHERE item_id = ? ",[choose], function(err,results){
+                if (err) {
+                    console.log(error)
+                } else {
+                    console.log(results)
+                    for (var i = 0; i < results.length; i++) {
+                         console.log("**********CHECKOUT**********")
+                         console.log("Name: " + results[i].product_name + " | Department: " + results[i].department_name + " | Quantity: " + quantity + " | Price: " + results[i].price * quantity + " | ")
+                    }
+                    connection.query("UPDATE Products SET stock_quantity = stock_quantity - ?   WHERE  item_ID=?", [quantity, choose], function (error, results) {
+                        if (error) {
+                            console.log("ther was an error", error)
+                        } else {
+                            console.log("new stock #", results)
+                        }
+        
+                    })
+                }
+            })
         }
     });
 });
