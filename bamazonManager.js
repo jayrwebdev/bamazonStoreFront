@@ -26,7 +26,7 @@ inquirer.prompt([
     } else if (directory === "Add To Inventory") {
         addInventory()
     } else if (directory === "Add New Product") {
-
+        newProduct()
     }
 })
 
@@ -74,6 +74,44 @@ function addInventory() {
                 console.log(err)
             } else {
                 console.log("You have updated the inventory of item " + id)
+            }
+        })
+    })
+}
+function newProduct() {
+  inquirer.prompt([
+      {
+       type: "list",
+       message: "Select a department",
+       choices: ["Gaming","Furniture","Accessories","Entertainment"],
+       name: "department"
+      },
+      {
+        type: "text",
+        message: "Enter name of new product",
+        name: "product"
+      },
+      {
+        type: "text",
+        message: "Enter price",
+        name: "price",
+      },
+      {
+          type: "list",
+          message: "Select the initial stock amount",
+          choices:[25, 50, 75, 100, 125, 150],
+          name: "stock"
+      }
+    ]).then(function(response){
+        var department = response.department;
+        var product = response.product;
+        var price = response.price;
+        var stock = response.stock;
+        connection.query("INSERT INTO Products (product_name,department_name,price,stock_quantity) VALUES(?,?,?,?)",[product,department,price,stock],function(err,results){
+            if (err) {
+                console.log("There was an error",err)
+            } else {
+                console.log("The product was suceesfully added to the database")
             }
         })
     })
